@@ -7,7 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	oyasumi "soladxy/oyasumi/biz/model/oyasumi"
+	oyasumi "github.com/soladxy/oyasumi/biz/model/oyasumi"
 )
 
 // HelloMethod .

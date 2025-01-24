@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"soladxy/oyasumi/biz/dal/mysql/model"
+	"github.com/soladxy/oyasumi/biz/dal/mysql/model"
 )
 
 func newWebsite(db *gorm.DB, opts ...gen.DOOption) website {

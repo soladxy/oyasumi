@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/soladxy/oyasumi/biz/consts"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
 	"os"
-	"soladxy/oyasumi/biz/consts"
 	"time"
 )
 

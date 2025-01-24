@@ -1,4 +1,4 @@
-module soladxy/oyasumi
+module github.com/soladxy/oyasumi
 
 go 1.21.6
 

@@ -4,7 +4,7 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
-	handler "soladxy/oyasumi/biz/handler"
+	handler "github.com/soladxy/oyasumi/biz/handler"
 )
 
 // customizeRegister registers customize routers.

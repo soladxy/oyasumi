@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/soladxy/oyasumi/biz/dal/mysql"
+	i "github.com/soladxy/oyasumi/biz/init"
 	"gorm.io/gen"
-	"soladxy/oyasumi/biz/dal/mysql"
-	i "soladxy/oyasumi/biz/init"
 )
 
 func main() {

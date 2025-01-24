@@ -2,7 +2,7 @@ package init
 
 import (
 	"github.com/joho/godotenv"
-	"soladxy/oyasumi/biz/dal/mysql"
+	"github.com/soladxy/oyasumi/biz/dal/mysql"
 )
 
 func Init() {

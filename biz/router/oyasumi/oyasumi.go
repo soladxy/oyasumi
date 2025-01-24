@@ -4,7 +4,7 @@ package oyasumi
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
-	oyasumi "soladxy/oyasumi/biz/handler/oyasumi"
+	oyasumi "github.com/soladxy/oyasumi/biz/handler/oyasumi"
 )
 
 /*
