@@ -4,13 +4,14 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/soladxy/oyasumi/biz/container"
 	router "github.com/soladxy/oyasumi/biz/router"
 )
 
 // register registers all routers.
-func register(r *server.Hertz) {
+func register(r *server.Hertz, c *container.Container) {
 
-	router.GeneratedRegister(r)
+	router.GeneratedRegister(r, c)
 
 	customizedRegister(r)
 }

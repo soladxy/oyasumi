@@ -3,8 +3,11 @@
 package oyasumi
 
 import (
+	"context"
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	oyasumi "github.com/soladxy/oyasumi/biz/handler/oyasumi"
+	"github.com/soladxy/oyasumi/biz/container"
+	handler "github.com/soladxy/oyasumi/biz/handler"
 )
 
 /*
@@ -14,8 +17,18 @@ import (
 */
 
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
-func Register(r *server.Hertz) {
+func Register(r *server.Hertz, c *container.Container) {
 
 	root := r.Group("/", rootMw()...)
-	root.GET("/hello", append(_hellomethodMw(), oyasumi.HelloMethod)...)
+	{
+		_api := root.Group("/api", _apiMw()...)
+		_api.GET("/checkSsl", append(_checksslMw(), wrapHandler(handler.CheckSSL, c))...)
+		_api.GET("/hello", append(_hellomethodMw(), wrapHandler(handler.HelloMethod, c))...)
+	}
+}
+
+func wrapHandler(h func(context.Context, *app.RequestContext, *container.Container), container *container.Container) app.HandlerFunc {
+	return func(c context.Context, ctx *app.RequestContext) {
+		h(c, ctx, container)
+	}
 }

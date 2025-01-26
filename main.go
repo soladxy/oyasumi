@@ -4,11 +4,16 @@ package main
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/soladxy/oyasumi/biz/container"
 )
 
 func main() {
+	c, err := container.InitService("./conf/oyasumi.yaml")
+	if err != nil {
+		panic(err)
+	}
 	h := server.Default()
 
-	register(h)
+	register(h, c)
 	h.Spin()
 }

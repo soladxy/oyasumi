@@ -1,16 +1,17 @@
 package util
 
 import (
-	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/soladxy/oyasumi/biz/consts"
+	"net/http"
 )
 
 // SendErrResponse  pack error response
-func SendErrResponse(ctx context.Context, c *app.RequestContext, code int, err error) {
-	c.String(code, err.Error())
+func SendErrResponse(c *app.RequestContext, respError *consts.RespError) {
+	c.JSON(http.StatusBadRequest, respError)
 }
 
 // SendSuccessResponse  pack success response
-func SendSuccessResponse(ctx context.Context, c *app.RequestContext, code int, data interface{}) {
-	c.JSON(code, data)
+func SendSuccessResponse(c *app.RequestContext, data interface{}) {
+	c.JSON(http.StatusOK, data)
 }
