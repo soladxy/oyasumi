@@ -11,3 +11,14 @@ build:
 
 wire:
 	cd biz/container/ && wire && cd ../../
+
+pkg_container:
+	docker build -t sola_api_go .
+
+re_run:
+	docker stop sola_api_go && \
+	docker rm sola_api_go && \
+	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
+
+run:
+	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
