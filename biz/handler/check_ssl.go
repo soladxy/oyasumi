@@ -4,6 +4,7 @@ package handler
 
 import (
 	"context"
+	"github.com/soladxy/oyasumi/biz/service/ssl"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/soladxy/oyasumi/biz/consts"
@@ -23,7 +24,22 @@ func CheckSSL(ctx context.Context, c *app.RequestContext, container *container.C
 		return
 	}
 
+	if req.Port == "" || req.Host == "" {
+		util.SendErrResponse(c, consts.ParamErr)
+		return
+	}
+
+	expired, msg, err := ssl.NewSslService(container).HostExpired(ctx, req.Host, req.Port)
+	if err != nil {
+		util.SendErrResponse(c, consts.DownstreamErr.AppendMsg(err.Error()))
+		return
+	}
+
 	resp := new(oyasumi.CheckSSLResp)
+	resp.Data = &oyasumi.CheckSSLData{
+		IsExpired: expired,
+		Msg:       msg,
+	}
 
 	util.SendSuccessResponse(c, resp)
 }

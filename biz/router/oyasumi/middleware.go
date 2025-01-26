@@ -4,11 +4,12 @@ package oyasumi
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/soladxy/oyasumi/biz/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{middleware.LogMw}
 }
 
 func _hellomethodMw() []app.HandlerFunc {

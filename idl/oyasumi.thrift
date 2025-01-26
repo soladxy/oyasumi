@@ -17,7 +17,8 @@ struct HelloData {
 }
 
 struct CheckSSLReq {
-    1: string domain (api.query="domain")
+    1: string host (api.query="host")
+    2: string port (api.query="port")
 }
 
 struct CheckSSLResp {
@@ -28,6 +29,7 @@ struct CheckSSLResp {
 
 struct CheckSSLData {
     1: bool is_expired // 是否过期
+    2: string msg // 提示信息
 }
 
 

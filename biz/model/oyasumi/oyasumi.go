@@ -569,19 +569,25 @@ func (p *HelloData) String() string {
 }
 
 type CheckSSLReq struct {
-	Domain string `thrift:"domain,1" json:"domain" query:"domain"`
+	Host string `thrift:"host,1" json:"host" query:"host"`
+	Port string `thrift:"port,2" json:"port" query:"port"`
 }
 
 func NewCheckSSLReq() *CheckSSLReq {
 	return &CheckSSLReq{}
 }
 
-func (p *CheckSSLReq) GetDomain() (v string) {
-	return p.Domain
+func (p *CheckSSLReq) GetHost() (v string) {
+	return p.Host
+}
+
+func (p *CheckSSLReq) GetPort() (v string) {
+	return p.Port
 }
 
 var fieldIDToName_CheckSSLReq = map[int16]string{
-	1: "domain",
+	1: "host",
+	2: "port",
 }
 
 func (p *CheckSSLReq) Read(iprot thrift.TProtocol) (err error) {
@@ -606,6 +612,14 @@ func (p *CheckSSLReq) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -645,7 +659,16 @@ func (p *CheckSSLReq) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Domain = v
+		p.Host = v
+	}
+	return nil
+}
+func (p *CheckSSLReq) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Port = v
 	}
 	return nil
 }
@@ -658,6 +681,10 @@ func (p *CheckSSLReq) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -679,10 +706,10 @@ WriteStructEndError:
 }
 
 func (p *CheckSSLReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("domain", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("host", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Domain); err != nil {
+	if err := oprot.WriteString(p.Host); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -693,6 +720,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CheckSSLReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("port", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Port); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *CheckSSLReq) String() string {
@@ -952,6 +996,8 @@ func (p *CheckSSLResp) String() string {
 type CheckSSLData struct {
 	// 是否过期
 	IsExpired bool `thrift:"is_expired,1" form:"is_expired" json:"is_expired" query:"is_expired"`
+	// 提示信息
+	Msg string `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
 }
 
 func NewCheckSSLData() *CheckSSLData {
@@ -962,8 +1008,13 @@ func (p *CheckSSLData) GetIsExpired() (v bool) {
 	return p.IsExpired
 }
 
+func (p *CheckSSLData) GetMsg() (v string) {
+	return p.Msg
+}
+
 var fieldIDToName_CheckSSLData = map[int16]string{
 	1: "is_expired",
+	2: "msg",
 }
 
 func (p *CheckSSLData) Read(iprot thrift.TProtocol) (err error) {
@@ -988,6 +1039,14 @@ func (p *CheckSSLData) Read(iprot thrift.TProtocol) (err error) {
 		case 1:
 			if fieldTypeId == thrift.BOOL {
 				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1031,6 +1090,15 @@ func (p *CheckSSLData) ReadField1(iprot thrift.TProtocol) error {
 	}
 	return nil
 }
+func (p *CheckSSLData) ReadField2(iprot thrift.TProtocol) error {
+
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Msg = v
+	}
+	return nil
+}
 
 func (p *CheckSSLData) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
@@ -1040,6 +1108,10 @@ func (p *CheckSSLData) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 	}
@@ -1075,6 +1147,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *CheckSSLData) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("msg", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Msg); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *CheckSSLData) String() string {

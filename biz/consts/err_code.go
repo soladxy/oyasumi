@@ -20,6 +20,10 @@ func (e RespError) Error() string {
 	return fmt.Sprintf("status: %d, message: %s", e.St, e.Msg)
 }
 
+func (e RespError) AppendMsg(s string) *RespError {
+	return &RespError{e.St, fmt.Sprintf("%s, %s", e.Msg, s)}
+}
+
 func NewRespError(code int32, msg string) *RespError {
 	return &RespError{code, msg}
 }
