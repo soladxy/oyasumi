@@ -12,13 +12,16 @@ build:
 wire:
 	cd biz/container/ && wire && cd ../../
 
-pkg_container:
+# 构建镜像
+build_image:
 	docker build -t sola_api_go .
 
+# 重新运行，之前已经已经运行过，会先删除再运行
 re_run:
 	docker stop sola_api_go && \
 	docker rm sola_api_go && \
 	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
 
+# 运行镜像
 run:
 	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
