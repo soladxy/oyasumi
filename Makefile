@@ -1,3 +1,9 @@
+gen_orm:
+	go run ./biz/gen/gorm
+
+gen_service:
+	go run ./biz/gen/service -name=user -outdir=./biz/service
+
 # 更新项目
 update:
 	hz update -idl idl/oyasumi.thrift --handler_by_method --customize_package=hz_tmpl/package.yaml
