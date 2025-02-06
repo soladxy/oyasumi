@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/soladxy/oyasumi/biz/container"
+	"net"
 	"time"
 )
 
@@ -21,32 +21,36 @@ func newSsl(c *container.Container) *_ssl {
 
 func (w *_ssl) HostExpired(ctx context.Context, host, port string) (bool, string, error) {
 	// 连接到目标主机
-	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%s", host, port), &tls.Config{})
+	// 设置超时
+	dialer := &net.Dialer{
+		Timeout: 10 * time.Second,
+	}
+	// 建立TLS连接（忽略证书验证）
+	conn, err := tls.DialWithDialer(dialer, "tcp", host+":"+port, &tls.Config{
+		InsecureSkipVerify: true,
+	})
 	if err != nil {
-		hlog.CtxErrorf(ctx, "[GetLatestWebsiteInfo] tls dial err: %v", err)
-		return false, "", err
+		return true, "", fmt.Errorf("连接失败: %v", err)
 	}
 	defer conn.Close()
 
-	// 获取服务端的证书链
-	state := conn.ConnectionState()
-	var expiredTime time.Time
-	now := time.Now()
-	for i, cert := range state.PeerCertificates {
-		hlog.CtxInfof(ctx, "[GetLatestWebsiteInfo] Issuer: %s, Subject: %s, Expiry: %s", cert.Issuer, cert.Subject, cert.NotAfter.Format(time.DateTime))
-
-		if i == 0 {
-			expiredTime = cert.NotAfter
-		}
-
-		// 检查证书是否过期
-		if now.Before(cert.NotBefore) {
-			return true, fmt.Sprintf("证书未生效，距离生效还有%d，生效开始时间%s", cert.NotBefore.Sub(now)/(time.Hour*24), cert.NotBefore.Local().Format(time.DateTime)), nil
-		}
-		if now.After(cert.NotAfter) {
-			return true, fmt.Sprintf("证书已过期，已过期%d天, 过期时间%s", now.Sub(cert.NotAfter)/(time.Hour*24)+1, cert.NotAfter.Local().Format(time.DateTime)), nil
-		}
+	// 获取证书链
+	certs := conn.ConnectionState().PeerCertificates
+	if len(certs) == 0 {
+		return true, "", fmt.Errorf("未找到证书")
 	}
 
-	return false, fmt.Sprintf("证书生效中，剩余%d天, 过期时间%s", expiredTime.Sub(now)/(time.Hour*24), expiredTime.Local().Format(time.DateTime)), nil
+	// 检查第一个证书（服务器证书）
+	cert := certs[0]
+	if time.Now().After(cert.NotAfter) {
+		return true, fmt.Sprintf("证书已过期，过期时间: %s", cert.NotAfter), nil
+	}
+	return false,
+		fmt.Sprintf("证书生效中，剩余%d天, 过期时间%s\n颁发给:%s\n颁发者: %s",
+			int(cert.NotAfter.Sub(time.Now()).Hours()/24),
+			cert.NotAfter.Local().Format(time.DateTime),
+			cert.Subject.CommonName,
+			cert.Issuer.CommonName,
+		),
+		nil
 }
