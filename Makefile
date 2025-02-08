@@ -20,14 +20,19 @@ wire:
 
 # 构建镜像
 build_image:
-	docker build -t sola_api_go .
+	TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
+	docker build -t 971181317/sola_api_go:$TAG -t 971181317/sola_api_go:latest .
+
+image_push:
+	docker push 971181317/sola_api_go:$TAG
+	docker push 971181317/sola_api_go:latest
 
 # 重新运行，之前已经已经运行过，会先删除再运行
 re_run:
 	docker stop sola_api_go && \
 	docker rm sola_api_go && \
-	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
+	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll 971181317/sola_api_go
 
 # 运行镜像
 run:
-	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll sola_api_go
+	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll 971181317/sola_api_go
