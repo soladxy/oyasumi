@@ -20,13 +20,13 @@ wire:
 
 # 构建镜像
 build_image:
-	TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
-	echo 971181317/oyasumi:$TAG building....
+	TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)" && \
+	echo 971181317/oyasumi:$TAG building.... && \
 	docker build -t 971181317/oyasumi:$TAG -t 971181317/oyasumi:latest .
 
 image_push:
-    TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
-	docker push 971181317/oyasumi:$TAG
+    TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)" && \
+	docker push 971181317/oyasumi:$TAG && \
 	docker push 971181317/oyasumi:latest
 
 # 重新运行，之前已经已经运行过，会先删除再运行
