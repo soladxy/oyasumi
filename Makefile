@@ -33,8 +33,8 @@ image_push:
 re_run:
 	docker stop oyasumi && \
 	docker rm oyasumi && \
-	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi
+	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi:latest
 
 # 运行镜像
 run:
-	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi
+	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi:latest
