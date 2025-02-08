@@ -21,18 +21,20 @@ wire:
 # 构建镜像
 build_image:
 	TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
-	docker build -t 971181317/sola_api_go:$TAG -t 971181317/sola_api_go:latest .
+	echo 971181317/oyasumi:$TAG building....
+	docker build -t 971181317/oyasumi:$TAG -t 971181317/oyasumi:latest .
 
 image_push:
-	docker push 971181317/sola_api_go:$TAG
-	docker push 971181317/sola_api_go:latest
+    TAG="$(git rev-parse --short HEAD)-$(date +%Y%m%d%H%M%S)"
+	docker push 971181317/oyasumi:$TAG
+	docker push 971181317/oyasumi:latest
 
 # 重新运行，之前已经已经运行过，会先删除再运行
 re_run:
-	docker stop sola_api_go && \
-	docker rm sola_api_go && \
-	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll 971181317/sola_api_go
+	docker stop oyasumi && \
+	docker rm oyasumi && \
+	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi
 
 # 运行镜像
 run:
-	docker run -dit -p 8890:8888 --name sola_api_go --network dxytoll 971181317/sola_api_go
+	docker run -dit -p 8890:8888 --name oyasumi --network dxytoll 971181317/oyasumi
