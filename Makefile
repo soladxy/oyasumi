@@ -18,7 +18,7 @@ build:
 wire:
 	cd biz/container/ && wire && cd ../../
 
-TAG := $(shell git rev-parse --short HEAD)-$(shell date +%Y%m%d%H%M%S)
+TAG := $(shell git rev-parse --short HEAD)-$(shell TZ=Asia/Shanghai date +%Y%m%d)
 
 # 构建镜像
 build_image:
